@@ -6,18 +6,18 @@ function onOpen(e) {
       var ss = SpreadsheetApp.getActiveSpreadsheet()
       var menuEntries = [];
       menuEntries.push({name: "Attach File...", functionName: "doGet"});
-      menuEntries.push({name: "Request Peer Review", functionName: "CM_Review_sendEmail"});
-      menuEntries.push({name: "Back To Developer", functionName: "CM_Back_to_Developer"});
-      menuEntries.push({name: "Request Lead Review", functionName: "CM_Review_Lead"});
-      menuEntries.push({name: "Review Completed", functionName: "CM_Review_done"});
+      menuEntries.push({name: "Request Peer Review", functionName: "Review_sendEmail"});
+      menuEntries.push({name: "Back To Developer", functionName: "Back_to_Developer"});
+      menuEntries.push({name: "Request Lead Review", functionName: "Review_Lead"});
+      menuEntries.push({name: "Review Completed", functionName: "Review_done"});
       menuEntries.push({name: "Show Only In-Progress Status", functionName: "hideCompleted"});
       menuEntries.push({name: "Show All", functionName: "showAll"});
-      ss.addMenu("Customer Master", menuEntries);
+      ss.addMenu("", menuEntries);
 }
 
 function test()
 {
-  /*var files = DriveApp.getFolderById('0B5chD7zomBxBN25uenNPcllqX0E').getFiles();
+  /*var files = DriveApp.getFolderById('FOLDERID').getFiles();
    for(var i=0; i < files.length; i++)
    {
       if(files[i].getName()=="SQL.txt")
@@ -27,14 +27,14 @@ function test()
       }
    }*/
    
-      var emailAddress = "tilak.dhar@saama.com";
+      var emailAddress = "EMAILID";
       var subject = "Test Message to see the format"
       var message =  "<html><head></head><body>"+
                   "<div style='width: 560px; height: 580px; background-color: #F1FAFF;border-radius: 10px;'><center><br /><br />"+
                   "<div style='border-radius: 10px;border: 1px solid #7DACC6;font-family: Times New Roman;font-size: 14px;font-weight: normal;padding: 25px 25px 15px 25px;width: 460px;height: 410px;background-color: White;text-align:left;'>"+
-                  "<img src='" + "http://saama.azurewebsites.net/wp-content/uploads/2013/04/saama_logo1.png" + "' style='border-style: none' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                  "<img src='" + "BACKGROUND IMAGE URL" + "' style='border-style: none' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                   "<br />"+
-                  "<div style='font-size: 24px;font-weight: strong;padding: 45px 25px 15px 25px;'> <center> Customer Master Peer Review</center> </div>"+
+                  "<div style='font-size: 24px;font-weight: strong;padding: 45px 25px 15px 25px;'> <center>  Peer Review</center> </div>"+
                   "<br /><br />"+ 
                   "Dear "+ "Tilak Dhar" + "," +
                     "<br /><br /><br />" + " Please review the following component. Below are the details:"+
@@ -52,7 +52,7 @@ function test()
 }
 
 function doGet(e) {
-      var app = UiApp.createApplication().setTitle("Customer Master - Add Attachment");
+      var app = UiApp.createApplication().setTitle(" - Add Attachment");
       SpreadsheetApp.getActiveSpreadsheet().show(app);
       var form = app.createFormPanel().setId('frm').setEncoding('multipart/form-data');
       var formContent = app.createVerticalPanel();
@@ -75,8 +75,8 @@ function doPost(e) {
       app.createLabel('saving...');
       var fileBlob = e.parameter.thefile;
   // Changed by Tilak for testing:
-  // var doc = DriveApp.getFolderById('0B5chD7zomBxBN25uenNPcllqX0E').createFile(fileBlob);
-  var doc = DriveApp.getFolderById('1TDYUiF78ium8OIoFgRFbdEhndI8jyne9sRL1BufCQzY').createFile(fileBlob);
+  // var doc = DriveApp.getFolderById('FOLDERID').createFile(fileBlob);
+  var doc = DriveApp.getFolderById('FOLDERID').createFile(fileBlob);
       var label = app.createLabel('File uploaded successfully');
 
       // write value into current cell
@@ -111,10 +111,10 @@ function doPost(e) {
     sheet.showRows(1, maxRows);
   }
 
-function CM_Review_sendEmail() {
+function Review_sendEmail() {
   var sheet = SpreadsheetApp.getActiveSheet();
-   //SpreadsheetApp.openById("1DPQXCWygFr6WcTNUj51aI1o5agVKPGIUKD1zajTdcao").toast("My message to the end user.","Message Title");
-  //var sheet = SpreadsheetApp.openById("1DPQXCWygFr6WcTNUj51aI1o5agVKPGIUKD1zajTdcao").getActiveSheet();
+   //SpreadsheetApp.openById("FOLDERID").toast("My message to the end user.","Message Title");
+  //var sheet = SpreadsheetApp.openById("FOLDERID").getActiveSheet();
   
   var cell =  sheet.getActiveCell();
   var cellR = cell.getRow();
@@ -181,21 +181,21 @@ function CM_Review_sendEmail() {
 
 
     var names = row[7].split(" ");
-    var emailAddress = names[0].toLowerCase() +"."+names[1].toLowerCase()+"@saama.com";
-    if(emailAddress=="tilak.dhar@saama.com")
+    var emailAddress = names[0].toLowerCase() +"."+names[1].toLowerCase()+"@gmail.com";
+    if(emailAddress=="EMAILID")
     {
-      emailAddress = "tilak.dhar@saama.com";
+      emailAddress = "EMAILID";
     }
    
    var senderNameTemp = (Session.getEffectiveUser().toString().split("@"));
    var senderName = senderNameTemp[0].split(".");
    var subject = sheet.getName() + " Peer Review - Please review "+ row[1] + " - " + row[2];
    
-   var ssURL = 'https://docs.google.com/a/saama.com/spreadsheets/d/1lpkA3Rs2lKosRuUZjPs042hJZbmkhfZRya_IN62Ndjk/edit#gid=0';
+   var ssURL = 'SHEET URL';
   
   // Changed by Tilak for testing
-   // var files = DriveApp.getFolderById('0B5chD7zomBxBN25uenNPcllqX0E').getFiles();
-   var files = DriveApp.getFolderById('1TDYUiF78ium8OIoFgRFbdEhndI8jyne9sRL1BufCQzY').getFiles();
+   // var files = DriveApp.getFolderById('FOLDERID').getFiles();
+   var files = DriveApp.getFolderById('FOLDERID').getFiles();
   var attchURL = row[3];
    for(var p=0; p < files.length; p++)
    {
@@ -210,9 +210,9 @@ function CM_Review_sendEmail() {
    var message =  "<html><head></head><body>"+
                   "<div style='width: 560px; height: 580px; background-color: #F1FAFF;border-radius: 10px;'><center><br /><br />"+
                   "<div style='border-radius: 10px;border: 1px solid #7DACC6;font-family: Times New Roman;font-size: 14px;font-weight: normal;padding: 25px 25px 15px 25px;width: 460px;height: 410px;background-color: White;text-align:left;'>"+
-                  "<img src='" + "http://saama.azurewebsites.net/wp-content/uploads/2013/04/saama_logo1.png" + "' style='border-style: none' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                  "<img src='" + "BACKGROUND IMAGE URL" + "' style='border-style: none' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                   "<br />"+
-                  "<div style='font-size: 24px;font-weight: strong;padding: 45px 25px 15px 25px;'> <center> Customer Master Peer Review</center> </div>"+
+                  "<div style='font-size: 24px;font-weight: strong;padding: 45px 25px 15px 25px;'> <center>  Peer Review</center> </div>"+
                   "<br /><br />"+ 
                   "Dear "+ row[7] + "," +
                   "<br /><br /><br />" + " Please review the following component. Below are the details:"+
@@ -262,7 +262,7 @@ function CM_Review_sendEmail() {
 }
 
 
-function CM_Back_to_Developer() {
+function Back_to_Developer() {
   var sheet = SpreadsheetApp.getActiveSheet();
   var cell =  sheet.getActiveCell();
   var cellR = cell.getRow();
@@ -332,10 +332,10 @@ function CM_Back_to_Developer() {
      }
 
     var names = row[6].split(" ");
-    var emailAddress = names[0].toLowerCase() +"."+names[1].toLowerCase()+"@saama.com";
-    if(emailAddress=="tilak.dhar@saama.com")
+    var emailAddress = names[0].toLowerCase() +"."+names[1].toLowerCase()+"@gmail.com";
+    if(emailAddress=="EMAILID")
     {
-      emailAddress = "tilak.dhar@saama.com";
+      emailAddress = "EMAILID";
     }
     
    var senderNameTemp = (Session.getEffectiveUser().toString().split("@"));
@@ -344,13 +344,13 @@ function CM_Back_to_Developer() {
    var subject = sheet.getName() + " - Back to Developer - Review Comments for "+ row[1] + " - " + row[2];
    
    //Changed by Tilak for testing 
-   //var ssURL = 'https://docs.google.com/a/saama.com/spreadsheets/d/1lpkA3Rs2lKosRuUZjPs042hJZbmkhfZRya_IN62Ndjk/edit#gid=0';
-   var ssURL = 'https://docs.google.com/spreadsheets/d/1TDYUiF78ium8OIoFgRFbdEhndI8jyne9sRL1BufCQzY/edit#gid=725519057';
+   
+   var ssURL = 'SPREADSHEET URL';
    
    
    // Changed by Tilak for testing
-   //var files = DriveApp.getFolderById('0B5chD7zomBxBN25uenNPcllqX0E').getFiles();
-   var files = DriveApp.getFolderById('1TDYUiF78ium8OIoFgRFbdEhndI8jyne9sRL1BufCQzY').getFiles();
+   
+   var files = DriveApp.getFolderById('FOLDERID').getFiles();
    
    var attchURL = row[3];
    for(var p=0; p < files.length; p++)
@@ -366,9 +366,9 @@ function CM_Back_to_Developer() {
    var message =  "<html><head></head><body>"+
                   "<div style='width: 560px; height: 580px; background-color: #F1FAFF;border-radius: 10px;'><center><br /><br />"+
                   "<div style='border-radius: 10px;border: 1px solid #7DACC6;font-family: Times New Roman;font-size: 14px;font-weight: normal;padding: 25px 25px 15px 25px;width: 460px;height: 410px;background-color: White;text-align:left;'>"+
-                  "<img src='" + "http://saama.azurewebsites.net/wp-content/uploads/2013/04/saama_logo1.png" + "' style='border-style: none' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                  "<img src='" + "BACKGROUND IMAGE URL" + "' style='border-style: none' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                   "<br />"+
-                  "<div style='font-size: 24px;font-weight: strong;padding: 45px 25px 15px 25px;'> <center> Customer Master - Back To Developer</center> </div>"+
+                  "<div style='font-size: 24px;font-weight: strong;padding: 45px 25px 15px 25px;'> <center>  - Back To Developer</center> </div>"+
                   "<br /><br />"+ 
                   "Dear "+ row[6] + "," +
                   "<br /><br /><br />" + "I have reviewed the following component. Please see my comments below."+
@@ -414,7 +414,7 @@ function CM_Back_to_Developer() {
   }
 }
 
-function CM_Review_Lead() {
+function Review_Lead() {
   var sheet = SpreadsheetApp.getActiveSheet();
   
   var cell =  sheet.getActiveCell();
@@ -510,10 +510,10 @@ function CM_Review_Lead() {
      }
    
     var names = row[8].split(" ");
-    var emailAddress = names[0].toLowerCase() +"."+names[1].toLowerCase()+"@saama.com";
-    if(emailAddress=="tilak.dhar@saama.com")
+    var emailAddress = names[0].toLowerCase() +"."+names[1].toLowerCase()+"@gmail.com";
+    if(emailAddress=="EMAILID")
     {
-      emailAddress = "tilak.dhar@saama.com";
+      emailAddress = "EMAILID";
     }
    
    var senderNameTemp = (Session.getEffectiveUser().toString().split("@"));
@@ -521,13 +521,13 @@ function CM_Review_Lead() {
    var subject = sheet.getName() + " - Lead Review - Please review "+ row[1] + " - " + row[2];
    
    // Changed by Tilak for testing
-   //var ssURL = 'https://docs.google.com/a/saama.com/spreadsheets/d/1lpkA3Rs2lKosRuUZjPs042hJZbmkhfZRya_IN62Ndjk/edit#gid=0';
-   var ssURL = 'https://docs.google.com/spreadsheets/d/1TDYUiF78ium8OIoFgRFbdEhndI8jyne9sRL1BufCQzY/edit#gid=725519057';
+   
+   var ssURL = 'SPREADSHEET URL';
    
    
    // Changed by Tilak for testing 
-   //var files = DriveApp.getFolderById('0B5chD7zomBxBN25uenNPcllqX0E').getFiles();
-   var files = DriveApp.getFolderById('1TDYUiF78ium8OIoFgRFbdEhndI8jyne9sRL1BufCQzY').getFiles();
+   
+   var files = DriveApp.getFolderById('FOLDERID').getFiles();
    var attchURL = row[3];
    for(var p=0; p < files.length; p++)
    {
@@ -542,9 +542,9 @@ function CM_Review_Lead() {
    var message =  "<html><head></head><body>"+
                   "<div style='width: 560px; height: 580px; background-color: #F1FAFF;border-radius: 10px;'><center><br /><br />"+
                   "<div style='border-radius: 10px;border: 1px solid #7DACC6;font-family: Times New Roman;font-size: 14px;font-weight: normal;padding: 25px 25px 15px 25px;width: 460px;height: 410px;background-color: White;text-align:left;'>"+
-                  "<img src='" + "http://saama.azurewebsites.net/wp-content/uploads/2013/04/saama_logo1.png" + "' style='border-style: none' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                  "<img src='" + "BACKGROUND IMAGE URL" + "' style='border-style: none' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                   "<br />"+
-                  "<div style='font-size: 24px;font-weight: strong;padding: 45px 25px 15px 25px;'> <center> Customer Master - Lead Review</center> </div>"+
+                  "<div style='font-size: 24px;font-weight: strong;padding: 45px 25px 15px 25px;'> <center>  - Lead Review</center> </div>"+
                   "<br /><br />"+ 
                   "Dear "+ row[8] + "," +
                   "<br /><br /><br />" + " Please do the Lead Review of the following component. Below are the details:"+
@@ -591,7 +591,7 @@ function CM_Review_Lead() {
 }
 
 
-function CM_Review_done() {
+function Review_done() {
   var sheet = SpreadsheetApp.getActiveSheet();
   var cell =  sheet.getActiveCell();
   var cellR = cell.getRow();
@@ -661,10 +661,10 @@ function CM_Review_done() {
      }
 
     var names = row[6].split(" ");
-    var emailAddress = names[0].toLowerCase() +"."+names[1].toLowerCase()+"@saama.com";
-    if(emailAddress=="tilak.dhar@saama.com")
+    var emailAddress = names[0].toLowerCase() +"."+names[1].toLowerCase()+"@gmail.com";
+    if(emailAddress=="EMAILID")
     {
-      emailAddress = "tilak.dhar@saama.com";
+      emailAddress = "EMAILID";
     }
     
    var senderNameTemp = (Session.getEffectiveUser().toString().split("@"));
@@ -673,12 +673,12 @@ function CM_Review_done() {
    var subject = sheet.getName() + " - Review Completed for "+ row[1] + " - " + row[2];
    
    // Changed by Tilak for testing 
-   //var ssURL = 'https://docs.google.com/a/saama.com/spreadsheets/d/1lpkA3Rs2lKosRuUZjPs042hJZbmkhfZRya_IN62Ndjk/edit#gid=0';
-   var ssURL = 'https://docs.google.com/spreadsheets/d/1TDYUiF78ium8OIoFgRFbdEhndI8jyne9sRL1BufCQzY/edit#gid=725519057';
+   
+   var ssURL = 'SPREADSHEET URL';
    
    // Changed by Tilak for testing 
-   //var files = DriveApp.getFolderById('0B5chD7zomBxBN25uenNPcllqX0E').getFiles();
-   var files = DriveApp.getFolderById('1TDYUiF78ium8OIoFgRFbdEhndI8jyne9sRL1BufCQzY').getFiles();
+   
+   var files = DriveApp.getFolderById('FOLDERID').getFiles();
    var attchURL = row[3];
    for(var p=0; p < files.length; p++)
    {
@@ -693,9 +693,9 @@ function CM_Review_done() {
    var message =  "<html><head></head><body>"+
                   "<div style='width: 560px; height: 580px; background-color: #F1FAFF;border-radius: 10px;'><center><br /><br />"+
                   "<div style='border-radius: 10px;border: 1px solid #7DACC6;font-family: Times New Roman;font-size: 14px;font-weight: normal;padding: 25px 25px 15px 25px;width: 460px;height: 410px;background-color: White;text-align:left;'>"+
-                  "<img src='" + "http://saama.azurewebsites.net/wp-content/uploads/2013/04/saama_logo1.png" + "' style='border-style: none' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                  "<img src='" + "BACKGROUND IMAGE URL" + "' style='border-style: none' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                   "<br />"+
-                  "<div style='font-size: 24px;font-weight: strong;padding: 45px 25px 15px 25px;'> <center> Customer Master - Review Complete</center> </div>"+
+                  "<div style='font-size: 24px;font-weight: strong;padding: 45px 25px 15px 25px;'> <center>  - Review Complete</center> </div>"+
                   "<br /><br />"+ 
                   "Dear "+ row[6] + "," +
                   "<br /><br /><br />" + " The review has been completed for the following component."+
@@ -775,7 +775,7 @@ Logger.log('URL : ' + SpreadsheetApp.getActiveSpreadsheet().getUrl());
 Logger.log('Id from URL: ' + getIdFromUrl(SpreadsheetApp.getActiveSpreadsheet().getUrl()));
 
 
-Logger.log(getIdFromUrl('https://docs.google.com/spreadsheets/d/1TDYUiF78ium8OIoFgRFbdEhndI8jyne9sRL1BufCQzY/edit#gid=725519057'));
+Logger.log(getIdFromUrl('SPREADSHEET URL'));
 
 /*** Getting sheet id 
 */
@@ -817,17 +817,17 @@ function t_Tilak() {
    Logger.log('Row(7) : ' + row[7].split(" "));
    
     var names = row[7].split(" ");
-    var emailAddress = names[0].toLowerCase() +"."+names[1].toLowerCase()+"@saama.com";
-    if(emailAddress=="tilak.dhar@saama.com")
+    var emailAddress = names[0].toLowerCase() +"."+names[1].toLowerCase()+"@gmail.com";
+    if(emailAddress=="EMAILID")
     {
-      emailAddress = "tilak.dhar@saama.com";
+      emailAddress = "EMAILID";
     }
    
    var senderNameTemp = (Session.getEffectiveUser().toString().split("@"));
    var senderName = senderNameTemp[0].split(".");
    var subject = sheet.getName() + " Peer Review - Please review "+ row[1] + " - " + row[2];
    
-   var ssURL = 'https://docs.google.com/a/saama.com/spreadsheets/d/1lpkA3Rs2lKosRuUZjPs042hJZbmkhfZRya_IN62Ndjk/edit#gid=0';
+   var ssURL = 'SHEET URL';
  }
 }
 
